@@ -46,5 +46,6 @@ public class RabbitMQService {
 			e.printStackTrace(); 
 		}
 		rabbitTemplate.convertAndSend("event-exchange", "", requestMessage);
+
 	}
 }

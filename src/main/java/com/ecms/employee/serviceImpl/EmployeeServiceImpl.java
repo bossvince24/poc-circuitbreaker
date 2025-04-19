@@ -53,8 +53,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	public Employee getEmployeeFallback(Long id, EmployeeNotFoundException exception) {
 		log.info("Fallback trigger due to: " + exception.getMessage());
-		String errorMsg = String.format("Failed to fetch employee with ID %d. Reason: %s", id, exception.getMessage());
-		rabbitMQService.sendMessage("this should fails");
+//		String errorMsg = String.format("Failed to fetch employee with ID %d. Reason: %s", id, exception.getMessage());
+		rabbitMQService.sendMessage("fails");
 		return new Employee();
 	}
 }
