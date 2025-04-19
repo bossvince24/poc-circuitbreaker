@@ -1,0 +1,54 @@
+#server
+server:
+  port: 8082
+
+#h2-console    
+spring:
+  application:
+    name: employee
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ""
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect 
+  hibernate:
+     ddl-auto: update
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+#actuators
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+    show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health, circuitbreaker, retry
+  
+#resilience4j
+resilience4j.circuitbreaker:
+    instances:
+      employeeServiceImpl:
+        registerHealthIndicator: true
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+#debug
+logging:
+  level:
+    io:
+      github:
+        resilience4j:
+          circuitbreaker: DEBUG  	
