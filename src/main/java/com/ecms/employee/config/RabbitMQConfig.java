@@ -1,37 +1,40 @@
 package com.ecms.employee.config;
 
-
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
 
+	@Value("${spring.rabbitmq.exchange.name}")
+	public String exchangeName;
 
-//	@Bean
-//	public Queue deadLetterQueue() {
-//		return new Queue("employee.dlq");
-//	}
+	@Value("${spring.rabbitmq.dlq.exchange}")
+	public String dlqExchange;
+	
+	@Value("${spring.rabbitmq.dlq.name}")
+	public String dlqQueueName;
 
-//	@Bean
-//	public Queue employeeQueue() {
-//		return QueueBuilder.durable("employeeQueue").deadLetterExchange("dlx-exchange")
-//				.deadLetterRoutingKey("employee.dlq").build();
-//	}
-//	
-//	@Bean
-//	public Binding dlqBinding() {
-//		return BindingBuilder.bind(deadLetterQueue()).to(dlxExchange()).with("employee.dlq");
-//	}
-//	
+	@Value("${spring.rabbitmq.dlq.routing-key}")
+	public String deadLetterRoutingKey;
+
 	@Bean
-	public FanoutExchange dlxExchange() {
-		return new FanoutExchange("event-exchange");
+	public FanoutExchange fanoutExchange() {
+		return new FanoutExchange(exchangeName);
+	}
+
+	@Bean
+	public DirectExchange directExchange() {
+		return new DirectExchange(dlqExchange);
+	}
+	
+	@Bean
+	public Queue deadLetterQueue() {
+		return QueueBuilder.durable(dlqQueueName).build();
 	}
 }

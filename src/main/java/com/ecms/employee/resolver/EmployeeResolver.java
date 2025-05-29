@@ -1,4 +1,4 @@
- package com.ecms.employee.resolver;
+package com.ecms.employee.resolver;
 
 import java.util.List;
 

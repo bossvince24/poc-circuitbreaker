@@ -19,10 +19,12 @@ spring:
   hibernate:
      ddl-auto: update
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+    exchange:
+      name: event-exchange
+    dlq:
+      exchange: event-dlq-exchange
+      name: event-notification-queue.dlq
+      routing-key: event.dlq
 
 #actuators
 management:
@@ -46,6 +48,7 @@ resilience4j.circuitbreaker:
         permittedNumberOfCallsInHalfOpenState: 3
         slidingWindowSize: 10
         automaticTransitionFromOpenToHalfOpenEnabled: true
+
 #debug
 logging:
   level:
